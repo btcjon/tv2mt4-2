@@ -12,13 +12,3 @@ def parse_message(message):
             'type': 'delete',
             'symbol': data.get('symbol')
         }
-    # Add more elif blocks here for other message types
-    else:
-        return data
-        return {
-            'type': 'delete',
-            'symbol': data.get('symbol')
-        }
-    # Add more elif blocks here for other message types
-    else:
-        return data
