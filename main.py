@@ -9,7 +9,7 @@ import logging
 from werkzeug.datastructures import ImmutableMultiDict
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 # Load environment variables
 load_dotenv()
@@ -24,6 +24,7 @@ airtable_operations = AirtableOperations()
 @app.route('/webhook', methods=['GET', 'POST'])
 def handle_webhook():
     logging.info(f"Received {request.method} request to /webhook")
+    logging.debug(f"Request data: {request.data}")
     if request.method == 'POST':
         data = parse_message(request.form)
         if data['type'] == 'update':
@@ -33,6 +34,7 @@ def handle_webhook():
         # Add more elif blocks here for other message types
     elif request.method == 'GET':
         data = parse_message(request.args)
+        logging.debug(f"GET request data: {data}")
         return "Webhook endpoint", 200
     return '', 200
 
