@@ -40,27 +40,34 @@ def update_airtable(symbol, keyword):
     # Load and format rules from yaml file
     with open("rules.yaml", 'r') as stream:
         rules = yaml.safe_load(stream)
+    logging.info(f"Loaded rules: {rules}")
 
     # Parse the rule
     parser = RuleParser()
     rules_str = AirtableOperations.format_rules(rules['rules'])
+    logging.info(f"Formatted rules: {rules_str}")
     parser.parsestr(rules_str)
 
     # Update the Airtable field if the rule condition is met
     # Define the action functions
     def update_resistance(value):
+        logging.info(f"Called update_resistance with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'Resistance': value})
 
     def update_support(value):
+        logging.info(f"Called update_support with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'Support': value})
 
     def update_td9buy(value):
+        logging.info(f"Called update_td9buy with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'TD9buy': value})
 
     def update_td9sell(value):
+        logging.info(f"Called update_td9sell with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'TD9sell': value})
 
     def update_trend(value):
+        logging.info(f"Called update_trend with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'Trend': value})
 
     # Register the action functions
@@ -71,6 +78,7 @@ def update_airtable(symbol, keyword):
     parser.register_function(update_trend, 'update_trend')
 
     # Execute the rules
+    logging.info(f"Executing rules with data: {{'type': 'update', 'keyword': {keyword}, 'symbol': {symbol}}}")
     parser.execute({"type": "update", "keyword": keyword, "symbol": symbol})
 
 def parse_message(message):
