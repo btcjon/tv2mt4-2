@@ -10,17 +10,6 @@ logging.basicConfig(level=logging.INFO)
 class TestUpdateAirtable(unittest.TestCase):
     @patch('app.airtable_operations')
     @patch('business_rule_engine.RuleParser')
-def format_rules(rules):
-    formatted_rules = []
-    for rule in rules:
-        name = rule.get('name', '')
-        condition = rule.get('condition', '')
-        action = rule.get('action', '')
-        formatted_rules.append(f"name '{name}' condition '{condition}' action '{action}'")
-    return "\n".join(formatted_rules)
-class TestUpdateAirtable(unittest.TestCase):
-    @patch('app.airtable_operations')
-    @patch('business_rule_engine.RuleParser')
     @patch('app.yaml')
     def test_update_airtable(self, mock_yaml, mock_parser, mock_airtable_operations):
         # Mock the yaml.safe_load function to return a specific set of rules
