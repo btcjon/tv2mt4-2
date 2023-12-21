@@ -51,7 +51,7 @@ class TestUpdateAirtable(unittest.TestCase):
         mock_parser_instance.execute.return_value = True
 
         # Call the function with test data
-        app.update_airtable('Test', 'test')
+        update_airtable('Test', 'test')
 
         # Verify that the update_by_field function was called with the correct arguments
         mock_airtable_operations.update_by_field.assert_called_once_with('Symbol', 'Test', {'Trend': 'test'})
