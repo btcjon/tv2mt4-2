@@ -17,7 +17,8 @@ def update_airtable(symbol, keyword):
 
     # Parse the rule
     parser = RuleParser()
-    parser.parsestr(rules)
+    rules_str = yaml.dump(rules)
+    parser.parsestr(rules_str)
 
     # Update the Airtable field if the rule condition is met
     if parser.execute({"keyword": keyword}):
