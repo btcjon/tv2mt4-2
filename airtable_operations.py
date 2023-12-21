@@ -18,6 +18,15 @@ class AirtableOperations:
     def update_by_field(self, field_name, field_value, new_data):
         self.airtable.update_by_field(field_name, field_value, new_data)
 
+def format_rules(rules):
+    formatted_rules = []
+    for rule in rules:
+        name = rule.get('name', '')
+        condition = rule.get('condition', '')
+        action = rule.get('action', '')
+        formatted_rules.append(f"name '{name}' condition '{condition}' action '{action}'")
+    return "\n".join(formatted_rules)
+
 airtable_operations = AirtableOperations()
 
 def update_airtable(symbol, keyword):
@@ -27,7 +36,7 @@ def update_airtable(symbol, keyword):
 
     # Parse the rule
     parser = RuleParser()
-    rules_str = yaml.dump(rules)
+    rules_str = format_rules(rules['rules'])
     parser.parsestr(rules_str)
 
     # Define the action functions
