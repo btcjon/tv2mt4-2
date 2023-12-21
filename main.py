@@ -22,8 +22,7 @@ airtable_operations = AirtableOperations()
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
-    raw_data = request.data.decode('utf-8')
-    data = parse_message(raw_data)
+    data = parse_message(request.form)
     if data['type'] == 'update':
         update_airtable(data['symbol'], data['keyword'])
     elif data['type'] == 'delete':
