@@ -17,7 +17,7 @@ def update_airtable(symbol, keyword):
 
     # Parse the rule
     parser = RuleParser()
-    rules_str = yaml.dump(rules)
+    rules_str = format_rules(rules['rules'])
     parser.parsestr(rules_str)
 
     # Update the Airtable field if the rule condition is met
@@ -25,6 +25,14 @@ def update_airtable(symbol, keyword):
         airtable_operations.update_by_field('Symbol', symbol, {'Trend': keyword})
         logging.info(f"Updated Airtable: Set '{symbol}' to '{keyword}'")
 
+def format_rules(rules):
+    formatted_rules = []
+    for rule in rules:
+        name = rule.get('name', '')
+        condition = rule.get('condition', '')
+        action = rule.get('action', '')
+        formatted_rules.append(f"name '{name}' condition '{condition}' action '{action}'")
+    return "\n".join(formatted_rules)
 class TestUpdateAirtable(unittest.TestCase):
     @patch('app.airtable_operations')
     @patch('business_rule_engine.RuleParser')
