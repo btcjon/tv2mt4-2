@@ -1,6 +1,7 @@
 # airtable_operations.py
 from business_rule_engine import RuleParser
 import yaml
+import yaml
 from airtable import Airtable
 from dotenv import load_dotenv
 import os

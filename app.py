@@ -2,6 +2,7 @@ from flask import Flask, request
 from airtable_operations import AirtableOperations
 from dotenv import load_dotenv
 import os
+from business_rule_engine import RuleParser
 import yaml
 import logging
 
