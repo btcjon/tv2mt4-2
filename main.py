@@ -30,6 +30,9 @@ def handle_webhook():
     logging.debug(f"Request args: {request.args}")
     if request.method == 'POST':
         data = parse_message(request.form)
+        if 'type' not in data:
+            logging.error("Missing 'type' in POST request data.")
+            return "Bad Request: Missing 'type' in data", 400
         if data['type'] == 'update':
             update_airtable(data['symbol'], data['keyword'])
         elif data['type'] == 'delete':
@@ -37,6 +40,9 @@ def handle_webhook():
         # Add more elif blocks here for other message types
     elif request.method == 'GET':
         data = parse_message(request.args)
+        if 'type' not in data:
+            logging.error("Missing 'type' in GET request data.")
+            return "Bad Request: Missing 'type' in data", 400
         logging.debug(f"GET request data: {data}")
         return "Webhook endpoint", 200
     return '', 200
