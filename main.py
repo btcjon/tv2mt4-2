@@ -24,6 +24,7 @@ airtable_operations = AirtableOperations()
 @app.route('/webhook', methods=['GET', 'POST'])
 def handle_webhook():
     logging.info(f"Received {request.method} request to /webhook")
+    logging.debug(f"Request content type: {request.content_type}")
     logging.debug(f"Request headers: {request.headers}")
     logging.debug(f"Request data: {request.get_data(as_text=True)}")
     logging.debug(f"Request form: {request.form}")
