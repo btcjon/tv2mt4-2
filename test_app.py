@@ -39,10 +39,6 @@ class TestUpdateAirtable(unittest.TestCase):
                 }
             ]
         }
-        - name: Test Rule
-          condition: keyword == "test"
-          action: update_airtable("Test", True)
-        """
 
         # Mock the RuleParser.execute function to return True
         mock_parser_instance = mock_parser.return_value
