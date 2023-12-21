@@ -1,4 +1,5 @@
 import unittest
+import logging
 from unittest.mock import patch, MagicMock
 from app import app, update_airtable
 from business_rule_engine import RuleParser
