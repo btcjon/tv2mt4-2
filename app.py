@@ -38,12 +38,35 @@ def update_airtable(symbol, keyword):
 
     # Parse the rule
     parser = RuleParser()
-    parser.parsestr(airtable_operations.format_rules(rules['rules']))
+    rules_str = AirtableOperations.format_rules(rules['rules'])
+    parser.parsestr(rules_str)
 
     # Update the Airtable field if the rule condition is met
-    if parser.execute({"keyword": keyword}):
-        airtable_operations.update_by_field('Symbol', symbol, {'Trend': keyword})
-        logging.info(f"Updated Airtable: Set '{symbol}' to '{keyword}'")
+    # Define the action functions
+    def update_resistance(value):
+        airtable_operations.update_by_field('Symbol', symbol, {'Resistance': value})
+
+    def update_support(value):
+        airtable_operations.update_by_field('Symbol', symbol, {'Support': value})
+
+    def update_td9buy(value):
+        airtable_operations.update_by_field('Symbol', symbol, {'TD9buy': value})
+
+    def update_td9sell(value):
+        airtable_operations.update_by_field('Symbol', symbol, {'TD9sell': value})
+
+    def update_trend(value):
+        airtable_operations.update_by_field('Symbol', symbol, {'Trend': value})
+
+    # Register the action functions
+    parser.register_function(update_resistance, 'update_resistance')
+    parser.register_function(update_support, 'update_support')
+    parser.register_function(update_td9buy, 'update_td9buy')
+    parser.register_function(update_td9sell, 'update_td9sell')
+    parser.register_function(update_trend, 'update_trend')
+
+    # Execute the rules
+    parser.execute({"type": "update", "keyword": keyword, "symbol": symbol})
 
 if __name__ == '__main__':
     app.run(port=5000)
