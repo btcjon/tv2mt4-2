@@ -29,7 +29,11 @@ def handle_webhook():
     logging.debug(f"Request form: {request.form}")
     logging.debug(f"Request args: {request.args}")
     if request.method == 'POST':
-        data = parse_message(request.form)
+        # Check if request.form is empty and parse request data accordingly
+        if request.form:
+            data = parse_message(request.form)
+        else:
+            data = parse_message(request.get_data(as_text=True))
         if 'type' not in data:
             logging.error("Missing 'type' in POST request data.")
             return "Bad Request: Missing 'type' in data", 400
