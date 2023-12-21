@@ -1,6 +1,6 @@
 # utils.py
 def parse_message(message):
-    data = dict(item.split("=") for item in message.split(","))
+    data = message.to_dict()
     if data['type'] == 'update':
         return {
             'type': 'update',
