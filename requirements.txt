@@ -1,0 +1,8 @@
+flask
+requests
+airtable-python-wrapper
+business-rules
+business-rule-engine
+PyYAML
+config
+python-dotenv
