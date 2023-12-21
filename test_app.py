@@ -1,10 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import logging
-import sys
-import os
-import yaml
-from app import update_airtable
+from app import app, update_airtable
 from business_rule_engine import RuleParser
 
 # Set up logging
