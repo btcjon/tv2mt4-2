@@ -1,7 +1,4 @@
-import unittest
-import logging
-from unittest.mock import patch
-from app import app, update_airtable
+from main import app, update_airtable
 from business_rule_engine import RuleParser
 
 # Set up logging
