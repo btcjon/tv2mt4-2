@@ -1,6 +1,9 @@
 # utils.py
 def parse_message(message):
-    data = dict(x.split('=') for x in message.split(','))
+    if isinstance(message, ImmutableMultiDict):
+        data = message.to_dict()
+    else:
+        data = dict(x.split('=') for x in message.split(','))
     if data['type'] == 'update':
         return {
             'type': 'update',
