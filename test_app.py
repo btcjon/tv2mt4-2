@@ -18,18 +18,19 @@ class TestUpdateAirtable(unittest.TestCase):
                 {
                     'name': 'Test Rule',
                     'condition': 'keyword == "test"',
-                    'action': 'update_airtable("Test", True)'
+                    'action': 'update_trend("test")'
                 }
             ]
         }
         # Mock the RuleParser.execute function to return True
         mock_parser_instance = mock_parser.return_value
         mock_parser_instance.execute.return_value = True
+        mock_parser_instance.register_function.return_value = None
 
         # Call the function with test data
         update_airtable('Test', 'test')
 
         # Verify that the update_by_field function was called with the correct arguments
-        mock_airtable_operations.update_by_field.assert_called_once_with('Symbol', 'Test', {'Trend': 'test'})
+        mock_airtable_operations.update_by_field.assert_called_once_with('Symbol', 'Test', {'Trend': True})
 if __name__ == '__main__':
     unittest.main()
