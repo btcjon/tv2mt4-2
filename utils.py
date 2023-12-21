@@ -1,9 +1,6 @@
 # utils.py
 def parse_message(message):
-    if isinstance(message, ImmutableMultiDict) and message:
-        data = message.to_dict()
-    else:
-        data = dict(x.split('=') for x in message.split(','))
+    data = dict(item.split("=") for item in message.split(","))
     # Ensure all required keys are present
     required_keys = {'type', 'symbol', 'keyword'}
     if not required_keys.issubset(data):
