@@ -2,29 +2,29 @@ rules:
   - name: "Update Resistance"
     # If the type is 'update' and the keyword is 'resistance', update the 'Resistance' field in Airtable to True
     condition: "type == 'update' and keyword == 'resistance'"
-    action: "update_airtable('Resistance', True)"
+    action: "update_resistance(True)"
     
   - name: "Update Support"
     # If the type is 'update' and the keyword is 'support', update the 'Support' field in Airtable to True
     condition: "type == 'update' and keyword == 'support'"
-    action: "update_airtable('Support', True)"
+    action: "update_support(True)"
     
   - name: "Update TD9buy"
     # If the type is 'update' and the keyword is 'TD9buy', update the 'TD9buy' field in Airtable to True
     condition: "type == 'update' and keyword == 'TD9buy'"
-    action: "update_airtable('TD9buy', True)"
+    action: "update_td9buy(True)"
     
   - name: "Update TD9sell"
     # If the type is 'update' and the keyword is 'TD9sell', update the 'TD9sell' field in Airtable to True
     condition: "type == 'update' and keyword == 'TD9sell'"
-    action: "update_airtable('TD9sell', True)"
+    action: "update_td9sell(True)"
     
   - name: "Update Trend Up"
     # If the type is 'update' and the keyword is 'up', update the 'Trend' field in Airtable to 'up'
     condition: "type == 'update' and keyword == 'up'"
-    action: "update_airtable('Trend', 'up')"
+    action: "update_trend('up')"
     
   - name: "Update Trend Down"
     # If the type is 'update' and the keyword is 'down', update the 'Trend' field in Airtable to 'down'
     condition: "type == 'update' and keyword == 'down'"
-    action: "update_airtable('Trend', 'down')"
+    action: "update_trend('down')"
