@@ -20,7 +20,7 @@ AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY')
 app = Flask(__name__)
 airtable_operations = AirtableOperations()
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['GET', 'POST'])
 def handle_webhook():
     logging.info(f"Received {request.method} request to /webhook")
     data = parse_message(request.form)
