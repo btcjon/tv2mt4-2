@@ -1,4 +1,5 @@
 from flask import Flask, request
+from utils import parse_message
 from airtable_operations import AirtableOperations
 from dotenv import load_dotenv
 import os
@@ -31,13 +32,13 @@ def handle_webhook():
     return '', 200
 
 def update_airtable(symbol, keyword):
-    # Load rules from yaml file
+    # Load and format rules from yaml file
     with open("rules.yaml", 'r') as stream:
         rules = yaml.safe_load(stream)
 
     # Parse the rule
     parser = RuleParser()
-    parser.parsestr(rules)
+    parser.parsestr(airtable_operations.format_rules(rules['rules']))
 
     # Update the Airtable field if the rule condition is met
     if parser.execute({"keyword": keyword}):
