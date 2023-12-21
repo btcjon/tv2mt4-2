@@ -6,6 +6,7 @@ import os
 from business_rule_engine import RuleParser
 import yaml
 import logging
+from werkzeug.datastructures import ImmutableMultiDict
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -23,13 +24,16 @@ airtable_operations = AirtableOperations()
 @app.route('/webhook', methods=['GET', 'POST'])
 def handle_webhook():
     logging.info(f"Received {request.method} request to /webhook")
-    # The 'GET' method is no longer supported, so the check is removed
-    data = parse_message(request.form)
-    if data['type'] == 'update':
-        update_airtable(data['symbol'], data['keyword'])
-    elif data['type'] == 'delete':
-        delete_from_airtable(data['symbol'])
-    # Add more elif blocks here for other message types
+    if request.method == 'POST':
+        data = parse_message(request.form)
+        if data['type'] == 'update':
+            update_airtable(data['symbol'], data['keyword'])
+        elif data['type'] == 'delete':
+            delete_from_airtable(data['symbol'])
+        # Add more elif blocks here for other message types
+    elif request.method == 'GET':
+        data = parse_message(request.args)
+        return "Webhook endpoint", 200
     return '', 200
 
 def update_airtable(symbol, keyword):
@@ -68,6 +72,13 @@ def update_airtable(symbol, keyword):
 
     # Execute the rules
     parser.execute({"type": "update", "keyword": keyword, "symbol": symbol})
+
+def parse_message(message):
+    if isinstance(message, ImmutableMultiDict):
+        data = message.to_dict()
+    else:
+        data = dict(item.split("=") for item in message.split(","))
+    return data
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
