@@ -31,6 +31,6 @@ class TestUpdateAirtable(unittest.TestCase):
         update_airtable('Test', 'test')
 
         # Verify that the update_by_field function was called with the correct arguments
-        mock_airtable_operations.update_by_field.assert_called_once_with('Symbol', 'Test', {'Trend': True})
+        mock_airtable_operations.update_by_field.assert_called_once_with('Symbol', 'Test', {'Trend': 'test'})
 if __name__ == '__main__':
     unittest.main()
