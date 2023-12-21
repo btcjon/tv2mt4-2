@@ -23,6 +23,8 @@ airtable_operations = AirtableOperations()
 @app.route('/webhook', methods=['GET', 'POST'])
 def handle_webhook():
     logging.info(f"Received {request.method} request to /webhook")
+    if request.method != 'POST':
+        return 'This endpoint only supports POST requests.', 405
     data = parse_message(request.form)
     if data['type'] == 'update':
         update_airtable(data['symbol'], data['keyword'])

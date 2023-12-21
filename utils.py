@@ -1,5 +1,7 @@
 # utils.py
 def parse_message(message):
+    if 'type' not in message:
+        raise ValueError("Missing 'type' in message data")
     data = message.to_dict()
     if data['type'] == 'update':
         return {
