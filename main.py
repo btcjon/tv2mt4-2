@@ -22,6 +22,7 @@ airtable_operations = AirtableOperations()
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
+    logging.info(f"Received {request.method} request to /webhook")
     data = parse_message(request.form)
     if data['type'] == 'update':
         update_airtable(data['symbol'], data['keyword'])
