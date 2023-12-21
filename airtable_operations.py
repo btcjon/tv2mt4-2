@@ -27,7 +27,8 @@ def update_airtable(symbol, keyword):
 
     # Parse the rule
     parser = RuleParser()
-    parser.parsestr(rules)
+    rules_str = yaml.dump(rules)
+    parser.parsestr(rules_str)
 
     # Define the action functions
     def update_resistance(value):

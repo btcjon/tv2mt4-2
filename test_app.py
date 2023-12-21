@@ -30,7 +30,15 @@ class TestUpdateAirtable(unittest.TestCase):
     @patch('app.yaml')
     def test_update_airtable(self, mock_yaml, mock_parser, mock_airtable_operations):
         # Mock the yaml.safe_load function to return a specific set of rules
-        mock_yaml.safe_load.return_value = """
+        mock_yaml.safe_load.return_value = {
+            'rules': [
+                {
+                    'name': 'Test Rule',
+                    'condition': 'keyword == "test"',
+                    'action': 'update_airtable("Test", True)'
+                }
+            ]
+        }
         - name: Test Rule
           condition: keyword == "test"
           action: update_airtable("Test", True)
