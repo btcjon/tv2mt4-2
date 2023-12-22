@@ -9,7 +9,7 @@ import logging
 from werkzeug.datastructures import ImmutableMultiDict
 
 # Set up logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 # Load environment variables
 load_dotenv()
@@ -24,16 +24,11 @@ airtable_operations = AirtableOperations()
 @app.route('/webhook', methods=['GET', 'POST'])
 def handle_webhook():
     logging.info(f"Received {request.method} request to /webhook")
-    logging.debug(f"Request content type: {request.content_type}")
-    logging.debug(f"Request headers: {request.headers}")
-    logging.debug(f"Request data: {request.get_data(as_text=True)}")
-    logging.debug(f"Request form: {request.form}")
-    logging.debug(f"Request args: {request.args}")
     if request.method == 'POST':
-        data = parse_message(request.get_data(as_text=True))
-        if 'type' not in data:
-            logging.error("Missing 'type' in POST request data.")
-            return "Bad Request: Missing 'type' in data", 400
+        if request.data:
+            data = parse_message(request.data.decode('utf-8'))  # Parse raw string data
+        else:
+            data = parse_message(request.form)
         if data['type'] == 'update':
             update_airtable(data['symbol'], data['keyword'])
         elif data['type'] == 'delete':
@@ -41,10 +36,6 @@ def handle_webhook():
         # Add more elif blocks here for other message types
     elif request.method == 'GET':
         data = parse_message(request.args)
-        if 'type' not in data:
-            logging.error("Missing 'type' in GET request data.")
-            return "Bad Request: Missing 'type' in data", 400
-        logging.debug(f"GET request data: {data}")
         return "Webhook endpoint", 200
     return '', 200
 
@@ -52,34 +43,27 @@ def update_airtable(symbol, keyword):
     # Load and format rules from yaml file
     with open("rules.yaml", 'r') as stream:
         rules = yaml.safe_load(stream)
-    logging.info(f"Loaded rules: {rules}")
 
     # Parse the rule
     parser = RuleParser()
     rules_str = AirtableOperations.format_rules(rules['rules'])
-    logging.info(f"Formatted rules: {rules_str}")
     parser.parsestr(rules_str)
 
     # Update the Airtable field if the rule condition is met
     # Define the action functions
     def update_resistance(value):
-        logging.info(f"Called update_resistance with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'Resistance': value})
 
     def update_support(value):
-        logging.info(f"Called update_support with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'Support': value})
 
     def update_td9buy(value):
-        logging.info(f"Called update_td9buy with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'TD9buy': value})
 
     def update_td9sell(value):
-        logging.info(f"Called update_td9sell with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'TD9sell': value})
 
     def update_trend(value):
-        logging.info(f"Called update_trend with value: {value}")
         airtable_operations.update_by_field('Symbol', symbol, {'Trend': value})
 
     # Register the action functions
@@ -90,7 +74,6 @@ def update_airtable(symbol, keyword):
     parser.register_function(update_trend, 'update_trend')
 
     # Execute the rules
-    logging.info(f"Executing rules with data: {{'type': 'update', 'keyword': {keyword}, 'symbol': {symbol}}}")
     parser.execute({"type": "update", "keyword": keyword, "symbol": symbol})
 
 def parse_message(message):
@@ -101,4 +84,4 @@ def parse_message(message):
     return data
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
