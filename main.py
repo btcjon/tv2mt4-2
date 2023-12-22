@@ -29,6 +29,7 @@ def handle_webhook():
             data = parse_message(request.data.decode('utf-8'))  # Parse raw string data
         else:
             data = parse_message(request.form)
+        logging.info(f"Parsed data: {data}")  # Log the parsed data
         if data['type'] == 'update':
             update_airtable(data['symbol'], data['keyword'])
         elif data['type'] == 'delete':
@@ -81,6 +82,7 @@ def parse_message(message):
         data = message.to_dict()
     else:
         data = dict(item.split("=") for item in message.split(","))
+    logging.info(f"Message: {message}, Parsed data: {data}")  # Log the message and parsed data
     return data
 
 if __name__ == "__main__":
